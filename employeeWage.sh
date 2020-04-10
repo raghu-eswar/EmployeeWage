@@ -6,3 +6,12 @@ if (( $isPresent == 0)); then
 else
     echo "present";
 fi
+
+dailyWage=0;
+hoursOfWork=0;
+wagePerHour=20;
+if (( $isPresent != 0)); then
+    hoursOfWork=8;
+    dailyWage=$(( $hoursOfWork * $wagePerHour));
+fi
+echo $dailyWage;
