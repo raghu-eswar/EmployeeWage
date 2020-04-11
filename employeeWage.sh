@@ -5,18 +5,20 @@ isPartTimeEmployee=$(( RANDOM % 4));
 dailyWage=0;
 hoursOfWork=0;
 wagePerHour=20;
-if (( $isPresent == 0)); then
-    echo "not present";
-else
-    echo "present";
-fi
-
-if (( $isPresent != 0)); then
-    if (( $isPartTimeEmployee == 1 )); then
-        hoursOfWork=4;
-    else
-        hoursOfWork=8;
-    fi
-fi
+case $isPresent in
+    0)  
+        echo "not present" ;;
+    *)  
+        echo "present"
+        case $isPartTimeEmployee in
+            1)  
+                echo "Part Time Employee" 
+                hoursOfWork=4 ;;
+            *)  
+                echo "Full Time Employee";
+                hoursOfWork=8 ;;
+        esac
+    ;;
+esac
 dailyWage=$(( $hoursOfWork * $wagePerHour));
 echo $dailyWage;
