@@ -1,6 +1,5 @@
 echo "welcome to empwage computation";
 
-isPresent=$(( RANDOM  % 5));
 declare monthlyAttendance;
 declare dailyWorkingHours;
 isPartTimeEmployee=$(( RANDOM % 4));
@@ -12,17 +11,18 @@ wagePerHour=20;
 workingDays=20;
 monthlyWage=0;
 
-for (( counter=1; counter<=$workingDays; counter++ ))
-do
-    temp=$(( RANDOM % 5));
-    monthlyAttendance[$counter]=$temp;
-    if (( $temp == 0 )); then
-        absentsInMonth=$(( $absentsInMonth + 1));
-    fi
-done
+function getAttendance() {
+    local -n declare isPresent=$1;
+    for (( counter=1; counter<=$workingDays; counter++))
+    do
+        isPresent[$counter]=$(( RANDOM % 5));
+    done
+}
 
-for (( counter=1; counter<=$workingDays; counter++))
-do
+function getWorkHours() {
+    local -n declare tempDailyWorkingHours=$1;
+    for (( counter=1; counter<=$workingDays; counter++))
+    do
     workHours=0;
     if (( ${monthlyAttendance[$counter]} != 0)); then
         if (( $isPartTimeEmployee == 1)); then
@@ -31,12 +31,14 @@ do
             workHours=$(( ( RANDOM % 2 )  + 7))
         fi
     fi
-    dailyWorkingHours[$counter]=$workHours;
-done
+    tempDailyWorkingHours[$counter]=$workHours;
+    done
+}
+getAttendance monthlyAttendance;
+getWorkHours dailyWorkingHours;
 
 for (( counter=1; counter<=$workingDays && $totalHoursOfWork<100; counter++))
     do
-    echo ${monthlyAttendance[$counter]};
     case ${monthlyAttendance[$counter]} in
         0)  
             echo "not present" ;;
@@ -46,24 +48,21 @@ for (( counter=1; counter<=$workingDays && $totalHoursOfWork<100; counter++))
                 1)  
                     echo "Part Time Employee" 
                     hoursOfWork=${dailyWorkingHours[$counter]};
-                    toDayWage=$(( $hoursOfWork * $wagePerHour))
-                    monthlyWage=$(( $monthlyWage + $toDayWage ))
+                    toDayWage=$(( $hoursOfWork * $wagePerHour));
+                    monthlyWage=$(( $monthlyWage + $toDayWage ));
                     ;;
                 *)  
                     echo "Full Time Employee";
-                    hoursOfWork=${dailyWorkingHours[$counter]}
-                    toDayWage=$(( $hoursOfWork * $wagePerHour))
-                    monthlyWage=$(( $monthlyWage + $toDayWage ))
+                    hoursOfWork=${dailyWorkingHours[$counter]};
+                    toDayWage=$(( $hoursOfWork * $wagePerHour));
+                    monthlyWage=$(( $monthlyWage + $toDayWage ));
                     ;;
             esac
         ;;
     esac
-     totalHoursOfWork=$(( $totalHoursOfWork + $hoursOfWork));
+    totalHoursOfWork=$(( $totalHoursOfWork + $hoursOfWork));
 done
 echo $monthlyWage;
-
-
-
 
 
 
