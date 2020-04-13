@@ -2,9 +2,9 @@ echo "welcome to empwage computation";
 
 declare monthlyAttendance;
 declare dailyWorkingHours;
+declare dailyWage;
 isPartTimeEmployee=$(( RANDOM % 4));
 absentsInMonth=0;
-dailyWage=0;
 hoursOfWork=0;
 totalHoursOfWork=0;
 wagePerHour=20;
@@ -60,9 +60,11 @@ for (( counter=1; counter<=$workingDays && $totalHoursOfWork<100; counter++))
             esac
         ;;
     esac
+    dailyWage[$counter]=$toDayWage;
     totalHoursOfWork=$(( $totalHoursOfWork + $hoursOfWork));
 done
 echo $monthlyWage;
+echo ${dailyWage[@]};
 
 
 
